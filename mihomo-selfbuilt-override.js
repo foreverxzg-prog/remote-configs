@@ -22,22 +22,33 @@ function main(params) {
 
   // ========== 1. 节点名称 ==========
   const AI_NODES = [
+    "hk-Front",
+    "hk-Front1",
     "Akile-香港",
     "Akile-香港1",
     "vmiss-美西",
+    "越南-河内",
     "合租_yanna"
   ];
 
   const STREAM_NODES = [
+    "hk-Front",
+    "hk-Front1",
     "Akile-香港",
     "Akile-香港1",
     "vmiss-美西",
+    "越南-河内",
     "合租_yanna"
   ];
 
   const HOME_NODES = [
-    "合租_yanna",
-    "vmiss-美西"
+    "hk-Front",
+    "hk-Front1",
+    "Akile-香港",
+    "Akile-香港1",
+    "vmiss-美西",
+    "越南-河内",
+    "合租_yanna"
   ];
 
   // ========== 2. 自定义规则（最高优先级） ==========
