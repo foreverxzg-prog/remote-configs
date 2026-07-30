@@ -17,12 +17,7 @@
 
 它不是给 `sing-box` 用的，也不是为了生成“纯节点列表”。
 
-
-也就是说：
-
-- `Clash.Meta / Mihomo` 统一走 `/clash-meta/{token}`
-- 传统 `Clash` 走 `/clash/{token}`
-- `sing-box` 走 `/sing-box/{token}`
+而是给中间层/sub前端拉取远程配置提供
 
 ### 2. `sing-box` 不应使用这份模板
 
@@ -362,7 +357,7 @@ https://你的worker域名/sing-box/你的ACCESS_TOKEN
 
 ## 还有没有必须优化的地方
 
-按你当前目标来看，没有额外必须做的结构性改动了。
+按当前目标来看，没有额外必须做的结构性改动了。
 
 现在这套最关键的部分已经齐了：
 
@@ -370,11 +365,4 @@ https://你的worker域名/sing-box/你的ACCESS_TOKEN
 - Worker 强制覆盖 `clash-meta / clash`
 - `sing-box` 保持纯净
 - raw 地址单独维护
-
-后续如果还要优化，更多是体验层面的，例如：
-
-- 在 Worker 首页返回里附带当前启用的 `MIHOMO_CONFIG_URL`
-- 给中间层增加一条 `/health` 诊断路由
-- 在前端或文档里补充一键复制订阅链接
-
-这些都不是必须项。
+
