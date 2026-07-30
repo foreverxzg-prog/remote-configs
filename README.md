@@ -7,7 +7,7 @@
 - `README.md`
 - `minimal-clean-meta-clash.ini`
 - `mihomo-selfbuilt-override.js`
-- 关于中间层部分的内容，仅提供思路，不提供代码仓库，可以拷打Ai
+- 关于中间层部分的内容，仅提供思路，不提供代码仓库
 
 ### 1. `minimal-clean-meta-clash.ini`文件说明
 
