@@ -173,15 +173,15 @@ function main(params) {
   });
 
   // ========== 7. 可选 DNS 精简增强 ==========
-  // 目标：只处理 ChatGPT(OpenAI) 相关解析，尽量减少网页卡顿。
+  // 目标：只处理 ChatGPT(OpenAI) 相关解析，并让这些 DNS 查询跟随 AI解锁 组出口。
   if (DNS_MODE === "lite") {
     const cnDns = [
       "https://dns.alidns.com/dns-query",
       "https://doh.pub/dns-query"
     ];
-    const proxyDns = [
-      "https://dns.cloudflare.com/dns-query",
-      "https://dns.google/dns-query"
+    const proxyDnsViaAi = [
+      "https://dns.cloudflare.com/dns-query#AI解锁",
+      "https://dns.google/dns-query#AI解锁"
     ];
     const aiDnsDomains = [
       "+.openai.com",
@@ -194,7 +194,7 @@ function main(params) {
     };
 
     aiDnsDomains.forEach(domain => {
-      nameserverPolicy[domain] = proxyDns;
+      nameserverPolicy[domain] = proxyDnsViaAi;
     });
 
     params.dns = {
@@ -205,7 +205,7 @@ function main(params) {
       nameserver: cnDns,
       "direct-nameserver": cnDns,
       "direct-nameserver-follow-policy": true,
-      "proxy-server-nameserver": proxyDns,
+      "proxy-server-nameserver": cnDns,
       "nameserver-policy": nameserverPolicy
     };
   }
@@ -330,6 +330,7 @@ function main(params) {
   params.rules = rules;
   return params;
 }
+
 
 
 
