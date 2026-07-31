@@ -1,10 +1,6 @@
 // ==================== Mihomo / Clash Meta 自建订阅覆写脚本（极简·防泄漏 DNS） ====================
 // 定位：只给含自建节点的订阅使用，负责全局增强 + fake-ip 防泄漏 DNS。
 //
-// 【DNS 铁律】全脚本只有一处 config.dns（合并写法）。任何地方都不得再硬赋值 config.dns，
-//   否则会冲掉 Sparkle 面板注入的 nameserver-policy / proxy-server-nameserver（防泄漏关键项）。
-// 【使用前提】Sparkle 客户端「DNS」面板必须保持开启——它提供上述 policy，本脚本只补基座并保留它。
-//   两者合体才不泄漏；关掉面板 DNS 则防泄漏失效。
 
 function main(config) {
   // ========== 生效范围：只有命中自建节点才应用 ==========
