@@ -12,7 +12,7 @@ function main(params) {
   // ========== 可配置项 ==========
   const GROUP_TYPE = "select";
   const FALLBACK = "DIRECT";
-  const DNS_MODE = "off"; // 可选: off | lite
+  const DNS_MODE = "lite"; // 可选: off | lite
 
   const AUTO_GROUP_NAME = "AUTO";
   const AUTO_TEST_URL = "https://www.gstatic.com/generate_204";
@@ -173,6 +173,7 @@ function main(params) {
   });
 
   // ========== 7. 可选 DNS 精简增强 ==========
+  // 目标：只处理 ChatGPT(OpenAI) 相关解析，尽量减少网页卡顿。
   if (DNS_MODE === "lite") {
     const cnDns = [
       "https://dns.alidns.com/dns-query",
@@ -182,6 +183,19 @@ function main(params) {
       "https://dns.cloudflare.com/dns-query",
       "https://dns.google/dns-query"
     ];
+    const aiDnsDomains = [
+      "+.openai.com",
+      "+.chatgpt.com",
+      "+.oaistatic.com",
+      "+.oaiusercontent.com"
+    ];
+    const nameserverPolicy = {
+      "geosite:cn": cnDns
+    };
+
+    aiDnsDomains.forEach(domain => {
+      nameserverPolicy[domain] = proxyDns;
+    });
 
     params.dns = {
       enable: true,
@@ -192,29 +206,7 @@ function main(params) {
       "direct-nameserver": cnDns,
       "direct-nameserver-follow-policy": true,
       "proxy-server-nameserver": proxyDns,
-      "nameserver-policy": {
-        "geosite:cn": cnDns,
-        "+.openai.com": proxyDns,
-        "+.chatgpt.com": proxyDns,
-        "+.oaistatic.com": proxyDns,
-        "+.oaiusercontent.com": proxyDns,
-        "+.anthropic.com": proxyDns,
-        "+.claude.ai": proxyDns,
-        "+.x.ai": proxyDns,
-        "+.cursor.sh": proxyDns,
-        "+.cursor.com": proxyDns,
-        "+.telegram.org": proxyDns,
-        "+.telegram.me": proxyDns,
-        "+.t.me": proxyDns,
-        "+.telegra.ph": proxyDns,
-        "+.telesco.pe": proxyDns,
-        "+.netflix.com": proxyDns,
-        "+.netflix.net": proxyDns,
-        "+.youtube.com": proxyDns,
-        "+.googlevideo.com": proxyDns,
-        "+.ytimg.com": proxyDns,
-        "+.spotify.com": proxyDns
-      }
+      "nameserver-policy": nameserverPolicy
     };
   }
 
@@ -338,3 +330,6 @@ function main(params) {
   params.rules = rules;
   return params;
 }
+
+
+
