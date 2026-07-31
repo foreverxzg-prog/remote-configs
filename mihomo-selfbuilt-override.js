@@ -40,11 +40,7 @@ function main(params) {
 
   const HOME_NODES = [
     "hk-Front",
-    "hk-Front1",
-    "云悠-香港",
-    "vmiss-美西",
-    "越南-河内",
-    "合租_yanna"
+    "hk-Front1"
   ];
 
   // ========== 2. 自定义规则（最高优先级） ==========
