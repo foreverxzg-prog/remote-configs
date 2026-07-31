@@ -69,25 +69,28 @@ ruleset=PROXY,[]FINAL
 
 ### `mihomo-selfbuilt-override.js` 脚本说明
 
-这个脚本是给自建节点订阅使用的通用覆写脚本，定位是在基础 `ini` 之上，继续补充分组、分流规则和节点连接细节。
+这个脚本是给自建节点订阅使用的通用覆写脚本，定位是在基础 `ini` 之上，继续补充全局增强、Sniffer 和 fake-ip DNS 相关配置。
 
 它当前主要负责：
 
-- 仅对命中的自建节点订阅生效，避免误作用到机场订阅
-- 在总组中补充 `AUTO` 自动测速策略组
-- 保留 `家宽组`、`AI解锁`、`流媒体解锁` 三个业务策略组
-- 为 Telegram、海外 AI、流媒体补充分流规则
-- 为支持的代理协议补充 `client-fingerprint: chrome`
-- 提供可选的精简 DNS 模式，默认关闭，以尽量避免网页卡顿
+- 仅当订阅中命中 `SELF_NODES` 里的节点名时才生效，当前脚本内置的是 `云悠-香港` 和 `vmiss-美西`
+- 写入 `profile.store-selected: true` 与 `profile.store-fake-ip: false`
+- 固定 `geox-url` 下载地址，指向 `MetaCubeX/meta-rules-dat` 的 `geoip`、`geosite`、`mmdb` 和 `asn`
+- 写入常用 DoH 域名的 `hosts` 映射，包含 `doh.pub`、`dns.google`、`dns.alidns.com`、`cloudflare-dns.com`
+- 启用 `sniffer`，并对 `HTTP`、`TLS`、`QUIC` 端口做嗅探，其中 `HTTP` 开启 `override-destination`
+- 启用一套默认的 `fake-ip` DNS 配置，监听 `0.0.0.0:5053`，禁用 `ipv6`，并补齐 `nameserver`、`fallback`、`direct-nameserver` 和 `fake-ip-filter`
+- 将默认 DNS 配置与现有 `config.dns` 合并，保留原配置中已有的 `nameserver-policy` 与 `proxy-server-nameserver`
 
 它当前默认不做这些事：
 
-- 不启用 Sniffer 嗅探
+- 不新增策略组
+- 不新增分流规则
+- 不改写节点本身的协议细节
 - 不写入 TUN 配置
 - 不覆写外部控制器相关设置
-- 不启用激进的 DNS 接管方案
+- 不清空已有的 `nameserver-policy` 和 `proxy-server-nameserver`
 
-该脚本定位为“自建订阅增强层”，建议与 `minimal-clean-meta-clash.ini` 配合使用：`ini` 负责基础配置清理与最小化收敛，`js` 负责策略组、规则和节点细节增强。
+该脚本定位为“自建订阅增强层”，建议与 `minimal-clean-meta-clash.ini` 配合使用：`ini` 负责基础配置清理与最小化收敛，`js` 负责全局增强、Sniffer 和 DNS 覆写。
 
 ## 整体调用关系
 
@@ -164,9 +167,9 @@ https://raw.githubusercontent.com/用户名/仓库/main/remote-configs/mihomo-se
 这份脚本不是单独替代 `ini` 使用，而是和 `minimal-clean-meta-clash.ini` 配合使用：
 
 - `ini` 用于收敛后端默认预设，保留最小基础结构
-- `js` 用于在客户端侧继续补充分组、分流规则和节点细节
+- `js` 用于在客户端侧继续补充全局增强、Sniffer 和 DNS 覆写
 
-通用理解可以记成一句话：先用 `ini` 把后端配置变干净，再用 `js` 给自建订阅补上你自己的策略逻辑。
+通用理解可以记成一句话：先用 `ini` 把后端配置变干净，再用 `js` 给自建订阅补上运行层和 DNS 层的增强逻辑。
 
 ### `minimal-clean-meta-clash.ini` 使用流程
 
@@ -366,3 +369,6 @@ https://你的worker域名/sing-box/你的ACCESS_TOKEN
 - `sing-box` 保持纯净
 - raw 地址单独维护
 
+
+
+
