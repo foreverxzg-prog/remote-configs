@@ -174,6 +174,7 @@ function main(params) {
 
   // ========== 7. 可选 DNS 精简增强 ==========
   // 目标：只处理 ChatGPT(OpenAI) 相关解析，并让这些 DNS 查询跟随 AI解锁 组出口。
+  // 不开 TUN 的前提下，脚本层能做的最强方案是：本地 DNS 监听 + GPT 域名 fake-ip + AI解锁 DoH。
   if (DNS_MODE === "lite") {
     const cnDns = [
       "https://dns.alidns.com/dns-query",
@@ -183,24 +184,32 @@ function main(params) {
       "https://dns.cloudflare.com/dns-query#AI解锁",
       "https://dns.google/dns-query#AI解锁"
     ];
-    const aiDnsDomains = [
-      "+.openai.com",
-      "+.chatgpt.com",
-      "+.oaistatic.com",
-      "+.oaiusercontent.com"
+    const gptDomains = [
+      "openai.com",
+      "chatgpt.com",
+      "oaistatic.com",
+      "oaiusercontent.com"
     ];
     const nameserverPolicy = {
       "geosite:cn": cnDns
     };
+    const fakeIpFilter = [];
 
-    aiDnsDomains.forEach(domain => {
-      nameserverPolicy[domain] = proxyDnsViaAi;
+    gptDomains.forEach(domain => {
+      nameserverPolicy[`+.${domain}`] = proxyDnsViaAi;
+      fakeIpFilter.push(`DOMAIN-SUFFIX,${domain},fake-ip`);
     });
+    fakeIpFilter.push("MATCH,real-ip");
 
     params.dns = {
       enable: true,
+      listen: "127.0.0.1:1053",
       ipv6: false,
-      "enhanced-mode": "redir-host",
+      "use-hosts": true,
+      "enhanced-mode": "fake-ip",
+      "fake-ip-range": "198.18.0.1/16",
+      "fake-ip-filter-mode": "rule",
+      "fake-ip-filter": fakeIpFilter,
       "default-nameserver": ["223.5.5.5", "119.29.29.29"],
       nameserver: cnDns,
       "direct-nameserver": cnDns,
@@ -330,6 +339,7 @@ function main(params) {
   params.rules = rules;
   return params;
 }
+
 
 
 
