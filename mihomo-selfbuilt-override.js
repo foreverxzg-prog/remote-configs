@@ -4,8 +4,7 @@
 function main(params) {
   // ========== 生效范围：只有命中自建节点才应用 ==========
   const SELF_NODES = [
-    "Akile-香港",
-    "Akile-香港1",
+    "云悠-香港",
     "vmiss-美西"
   ];
 
@@ -24,8 +23,7 @@ function main(params) {
   const AI_NODES = [
     "hk-Front",
     "hk-Front1",
-    "Akile-香港",
-    "Akile-香港1",
+    "云悠-香港",
     "vmiss-美西",
     "越南-河内",
     "合租_yanna"
@@ -34,8 +32,7 @@ function main(params) {
   const STREAM_NODES = [
     "hk-Front",
     "hk-Front1",
-    "Akile-香港",
-    "Akile-香港1",
+    "云悠-香港",
     "vmiss-美西",
     "越南-河内",
     "合租_yanna"
@@ -44,8 +41,7 @@ function main(params) {
   const HOME_NODES = [
     "hk-Front",
     "hk-Front1",
-    "Akile-香港",
-    "Akile-香港1",
+    "云悠-香港",
     "vmiss-美西",
     "越南-河内",
     "合租_yanna"
