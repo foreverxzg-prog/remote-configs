@@ -4,8 +4,9 @@
 // 1. Only runs when the exact front node name exists in the current config.
 // 2. Builds a hidden front pool for the Aliyun transit node(s).
 // 3. Clones every other real proxy into a chained proxy via dialer-proxy.
-// 4. Creates a visible policy group named "阿里云前置".
-// 5. Injects that new group into top-level selector groups like PROXY.
+// 4. Forces chained domain-based nodes to use IPv4 first.
+// 5. Skips literal IPv6 landing nodes, because an IPv4-only front node cannot dial them.
+// 6. Creates a visible policy group named "阿里云前置".
 //
 // Adjust FRONT_NODE_NAMES if your Aliyun front node uses a different name.
 
@@ -14,8 +15,9 @@ const FRONT_POOL_GROUP_NAME = "__阿里云前置池";
 const CHAIN_GROUP_NAME = "阿里云前置";
 const CHAIN_NAME_SUFFIX = " · 阿里云前置";
 const INSERT_TO_GROUPS = ["PROXY", "Proxy", "GLOBAL"];
+const CHAIN_IP_VERSION = "ipv4";
 
-function main(config, profileName) {
+function main(config) {
   const nextConfig = config || {};
   const proxies = Array.isArray(nextConfig.proxies) ? nextConfig.proxies : [];
   const proxyGroups = Array.isArray(nextConfig["proxy-groups"]) ? nextConfig["proxy-groups"] : [];
@@ -53,6 +55,8 @@ function main(config, profileName) {
     const chained = deepClone(proxy);
     chained.name = makeChainName(proxy.name);
     chained["dialer-proxy"] = FRONT_POOL_GROUP_NAME;
+    chained["ip-version"] = CHAIN_IP_VERSION;
+    delete chained.interface;
     return chained;
   });
 
@@ -100,6 +104,10 @@ function shouldChainProxy(proxy, frontNodeNames) {
     return false;
   }
 
+  if (isLiteralIPv6(proxy.server)) {
+    return false;
+  }
+
   const type = String(proxy.type).toLowerCase();
   return type !== "direct" && type !== "reject" && type !== "pass";
 }
@@ -118,6 +126,10 @@ function makeChainName(name) {
 
 function unique(list) {
   return Array.from(new Set(list.filter(Boolean)));
+}
+
+function isLiteralIPv6(server) {
+  return typeof server === "string" && server.includes(":") && !server.includes(".");
 }
 
 function deepClone(value) {
