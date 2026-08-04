@@ -11,7 +11,7 @@
 // Change CUSTOM_VLESS_FRONT_NODE_NAMES to your preferred custom VLESS front node(s).
 
 const FRONT_NODE_NAMES = ["阿里云中转"];
-const CUSTOM_VLESS_FRONT_NODE_NAMES = ["hk-Front"];
+const CUSTOM_VLESS_FRONT_NODE_NAMES = ["酷网-香港"];
 const INSERT_TO_GROUPS = ["PROXY", "Proxy", "GLOBAL"];
 const CHAIN_IP_VERSION = "ipv4";
 const TRAILING_NODE_INDEX_RE = /(?:[-_\s·.]?\d+)+$/u;
