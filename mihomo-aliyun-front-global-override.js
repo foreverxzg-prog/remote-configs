@@ -5,7 +5,7 @@
 // handled with provider cloning + provider override.
 
 const FRONT_NODE_NAMES = ["阿里云中转"];
-const CUSTOM_SS_FRONT_NODE_NAMES = ["家人-日本"];
+const CUSTOM_SS_FRONT_NODE_NAMES = ["酷网-香港"];
 const TARGET_PROXY_TYPES = ["ss", "shadowsocks"];
 const INSERT_TO_GROUPS = ["PROXY", "Proxy", "GLOBAL"];
 const CHAIN_IP_VERSION = "ipv4";
